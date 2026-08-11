@@ -1,0 +1,194 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  USER
+  ORGANIZER
+  CONCIERGE
+  ADMIN
+}
+
+enum PublicationStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+}
+
+enum SeatStatus {
+  AVAILABLE
+  RESERVED
+  SOLD
+}
+
+enum ShoppingCartStatus {
+  ACTIVE
+  CHECKED_OUT
+  ABANDONED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  DEBIT_CARD
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         UserRole @default(USER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  publications Publication[]
+  carts        ShoppingCart[]
+
+  @@index([email])
+}
+
+model Publication {
+  id          Int    @id @default(autoincrement())
+  externalEventId String
+  userId      Int
+
+  name        String
+  local       String
+  price       Decimal           @db.Decimal(10, 2)
+  capacity    Int
+  description String?
+  type        String
+  image       String?
+  status      PublicationStatus @default(DRAFT)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organizer User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  seats     Seat[]
+  cartItems ShoppingCartItem[]
+  tickets   Ticket[]
+
+  @@index([userId])
+  @@index([externalEventId])
+}
+
+model Seat {
+  id            Int @id @default(autoincrement())
+  publicationId Int
+
+  status SeatStatus @default(AVAILABLE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+
+  cartItems ShoppingCartItem[]
+  tickets   Ticket[]
+
+  @@unique([publicationId, id])
+  @@index([publicationId])
+}
+
+model ShoppingCart {
+  id     Int @id @default(autoincrement())
+  userId Int
+
+  total  Decimal            @db.Decimal(10, 2)
+  status ShoppingCartStatus @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  items    ShoppingCartItem[]
+  purchase Purchase?
+
+  @@index([userId])
+}
+
+model ShoppingCartItem {
+  id             Int @id @default(autoincrement())
+  shoppingCartId Int
+  publicationId  Int
+  seatId         Int
+
+  value Decimal @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  shoppingCart ShoppingCart @relation(fields: [shoppingCartId], references: [id], onDelete: Cascade)
+  publication  Publication  @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+  seat         Seat         @relation(fields: [seatId], references: [id], onDelete: Cascade)
+
+  @@unique([shoppingCartId, seatId])
+  @@index([publicationId])
+  @@index([seatId])
+}
+
+model Purchase {
+  id             Int @id @default(autoincrement())
+  shoppingCartId Int @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  shoppingCart ShoppingCart @relation(fields: [shoppingCartId], references: [id], onDelete: Cascade)
+
+  tickets Ticket[]
+  payment Payment?
+}
+
+model Payment {
+  id         Int @id @default(autoincrement())
+  purchaseId Int @unique
+
+  method PaymentMethod
+  value  Decimal       @db.Decimal(10, 2)
+  status PaymentStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+
+  purchase Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+}
+
+model Ticket {
+  id            Int @id @default(autoincrement())
+  purchaseId    Int
+  publicationId Int
+  seatId        Int
+
+  code      String    @unique
+  value     Decimal   @db.Decimal(10, 2)
+  type      String
+  shareLink String?
+  usedAt    DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  purchase    Purchase    @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+  seat        Seat        @relation(fields: [seatId], references: [id], onDelete: Cascade)
+
+  @@index([purchaseId])
+  @@index([publicationId])
+  @@index([seatId])
+}
