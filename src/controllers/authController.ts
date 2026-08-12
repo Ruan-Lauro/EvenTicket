@@ -3,16 +3,21 @@ import { AuthService } from "../services/authService.ts";
 import {
   loginSchema,
   registerSchema,
-} from "../interfaces/authInterface.ts";
+} from "../utils/validatorsUtil.ts";
 import { AppError } from "../errors/appError.ts";
 
-const authService = new AuthService();
 
 export class AuthController {
+
+  private readonly authService: AuthService;
+  constructor(authService: AuthService) {
+    this.authService = authService;
+  }
+
   async register(req: Request, res: Response) {
     const data = registerSchema.parse(req.body);
 
-    const user = await authService.register(
+    const user = await this.authService.register(
       data.name,
       data.email,
       data.password,
@@ -27,7 +32,7 @@ export class AuthController {
   async login(req: Request, res: Response) {
     const data = loginSchema.parse(req.body);
     try {
-      const result = await authService.login(
+      const result = await this.authService.login(
         data.email,
         data.password,
       );

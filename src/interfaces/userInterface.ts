@@ -1,11 +1,39 @@
-import { z } from "zod";
+export interface IUser {
+  id: number;
+  name: string;
+  email: string;
+  passwordHash: string;
+  role: "USER" | "ADMIN" | "ORGANIZER" | "CONCIERGE";
+  emailVerified: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
-export const userSchema = z.object({
-    id: z.number(),
-    email: z.string().email(),
-    name: z.string().min(2).max(100),
-    role: z.string().optional(),
-    createdAt: z.date(),
-    updatedAt: z.date(),
-});
+export interface IUserGet {
+  id: number;
+  name: string;
+  email: string;
+  role: "USER" | "ADMIN" | "ORGANIZER" | "CONCIERGE";
+  emailVerified: boolean;
+  createdAt: Date;
+}
+ 
+export interface IUserCreate {
+  name: string;
+  email: string;
+  passwordHash: string;
+}
 
+export interface IUserCreateWithRole {
+  name: string;
+  email: string;
+  passwordHash: string;
+  role: "USER" | "ADMIN" | "ORGANIZER" | "CONCIERGE";
+}
+ 
+export interface IUserPublic {
+  id: number;
+  name: string;
+  email: string;
+  emailVerified: boolean;
+}

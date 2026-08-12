@@ -1,17 +1,23 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { UserRepository } from "../repositories/userRepository.ts";
+import type { IUserRepository } from "../interfaces/userRepositoryInterface.ts";
 import { AppError } from "../errors/appError.ts";
 
-const userRepository = new UserRepository();
 
 export class AuthService {
+  
+  private readonly userRepo: IUserRepository;
+
+  constructor(userRepo: IUserRepository) {
+    this.userRepo = userRepo;
+  }
+  
   async register(
     name: string,
     email: string,
     password: string,
   ) {
-    const existingUser = await userRepository.findByEmail(email);
+    const existingUser = await this.userRepo.findByEmail(email);
 
     if (existingUser) {
       throw new AppError("Email já cadastrado", 409);
@@ -19,7 +25,7 @@ export class AuthService {
 
     const passwordHash = await bcrypt.hash(password, 12);
 
-    const user = await userRepository.create({
+    const user = await this.userRepo.create({
       name,
       email,
       passwordHash,
@@ -34,7 +40,7 @@ export class AuthService {
   }
 
   async login(email: string, password: string) {
-    const user = await userRepository.findByEmail(email);
+    const user = await this.userRepo.findByEmail(email);
 
     if (!user) {
       throw new AppError("Email ou senha inválidos", 401);
@@ -70,4 +76,5 @@ export class AuthService {
       },
     };
   }
+
 }
