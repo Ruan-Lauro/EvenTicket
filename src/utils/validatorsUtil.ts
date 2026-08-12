@@ -83,3 +83,23 @@ export const publicationSchema = z.object({
     status: z.enum(["DRAFT", "PUBLISHED", "CANCELLED"]),
     userId: z.number().int().nonnegative(),
 })
+
+export const publicationCreateSchema = z.object({
+    externalEventId: z.string().max(100),
+    local: z.string().max(200),
+    date: z.coerce.date(),
+    price: z
+        .number()
+        .nonnegative(),
+    capacity: z.number().int().nonnegative(),
+    status: z.enum(["DRAFT", "PUBLISHED", "CANCELLED"]),
+    userId: z.number().int().nonnegative(),
+});
+export const publicationUpdateSchema = publicationCreateSchema.partial();
+
+export const idParamSchema = z
+  .object({ id: z.string() })
+  .refine((obj) => /^\d+$/.test(obj.id), {
+    message: "ID inválido",
+  })
+  .transform((obj) => ({ id: Number(obj.id) }));

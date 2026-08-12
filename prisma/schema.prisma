@@ -74,6 +74,7 @@ model Publication {
   type        String
   image       String?
   status      PublicationStatus @default(DRAFT)
+  date        DateTime
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -81,7 +82,6 @@ model Publication {
   organizer User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   seats     Seat[]
-  cartItems ShoppingCartItem[]
   tickets   Ticket[]
 
   @@index([userId])
@@ -91,7 +91,8 @@ model Publication {
 model Seat {
   id            Int @id @default(autoincrement())
   publicationId Int
-
+  number        Int
+  row           String
   status SeatStatus @default(AVAILABLE)
 
   createdAt DateTime @default(now())
@@ -127,7 +128,6 @@ model ShoppingCart {
 model ShoppingCartItem {
   id             Int @id @default(autoincrement())
   shoppingCartId Int
-  publicationId  Int
   seatId         Int
 
   value Decimal @db.Decimal(10, 2)
@@ -136,11 +136,9 @@ model ShoppingCartItem {
   updatedAt DateTime @updatedAt
 
   shoppingCart ShoppingCart @relation(fields: [shoppingCartId], references: [id], onDelete: Cascade)
-  publication  Publication  @relation(fields: [publicationId], references: [id], onDelete: Cascade)
   seat         Seat         @relation(fields: [seatId], references: [id], onDelete: Cascade)
 
   @@unique([shoppingCartId, seatId])
-  @@index([publicationId])
   @@index([seatId])
 }
 

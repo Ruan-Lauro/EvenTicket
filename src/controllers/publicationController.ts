@@ -1,24 +1,23 @@
-
 import type { Request, Response } from "express";
-import { UserService } from "../services/userService.ts";
 import { AppError } from "../errors/appError.ts";
+import type { PublicationService } from "../services/publicationService.ts";
 import {
-    userSchemaUpdate,
-    createUserWithRoleSchema,
+    publicationCreateSchema,
+    publicationUpdateSchema,
     idParamSchema,
 } from "../utils/validatorsUtil.ts";
 
-export class UserController {
+export class PublicationController {
 
-    private readonly userService: UserService;
-    constructor(userService: UserService) {
-        this.userService = userService;
+    private readonly publicationService: PublicationService;
+    constructor(publicationService: PublicationService) {
+    this.publicationService = publicationService;
     }
 
-    async getUsers(req: Request, res: Response) {
+    async getPublications(req: Request, res: Response) {
         try {
-            const users = await this.userService.getUsers();
-            return res.status(200).json(users);
+            const publications = await this.publicationService.getPublications();
+            return res.status(200).json(publications);
         } catch (error) {
             if (error instanceof AppError) {
                 return res.status(error.statusCode).json({ message: error.message });
@@ -30,31 +29,11 @@ export class UserController {
         }
     }
 
-    async getUserById(req: Request, res: Response) {
-        try {
-            const params = idParamSchema.parse(req.params);
-            const user = await this.userService.getUserById(params.id);
-            return res.status(200).json(user);
-        } catch (error) {
-            if (error instanceof AppError) {
-                return res.status(error.statusCode).json({ message: error.message });
-            }
-
-            console.error(error);
-
-            return res.status(500).json({ message: "Erro interno do servidor" });
-        }
-    }
-
-    async updateUser(req: Request, res: Response) {
+    async getPublicationById(req: Request, res: Response) {
         try {
             const params = idParamSchema.parse(req.params);
-            const data = userSchemaUpdate.parse(req.body);
-            const updatedUser = await this.userService.updateUser(params.id, data);
-            return res.status(200).json({
-                mensagem: "Usuário atualizado com sucesso",
-                data: updatedUser,
-            });
+            const publication = await this.publicationService.getPublicationById(params.id);
+            return res.status(200).json(publication);
         } catch (error) {
             if (error instanceof AppError) {
                 return res.status(error.statusCode).json({ message: error.message });
@@ -66,14 +45,11 @@ export class UserController {
         }
     }
 
-    async createUserWithRole(req: Request, res: Response) {
+    async createPublication(req: Request, res: Response) {
         try {
-            const data = createUserWithRoleSchema.parse(req.body);
-            const newUser = await this.userService.createUserWithRole(data);
-            return res.status(201).json({
-                mensagem: "Usuário criado com sucesso",
-                data: newUser,
-            });
+            const data = publicationCreateSchema.parse(req.body);
+            const publication = await this.publicationService.createPublication(data);
+            return res.status(201).json(publication);
         } catch (error) {
             if (error instanceof AppError) {
                 return res.status(error.statusCode).json({ message: error.message });
@@ -85,13 +61,12 @@ export class UserController {
         }
     }
 
-    async deleteUser(req: Request, res: Response) {
+    async updatePublication(req: Request, res: Response) {
         try {
             const params = idParamSchema.parse(req.params);
-            await this.userService.deleteUser(params.id);
-            return res.status(200).json({
-                mensagem: "Usuário deletado com sucesso",
-            });
+            const data = publicationUpdateSchema.parse(req.body);
+            const publication = await this.publicationService.updatePublication(params.id, data);
+            return res.status(200).json(publication);
         } catch (error) {
             if (error instanceof AppError) {
                 return res.status(error.statusCode).json({ message: error.message });
@@ -102,4 +77,21 @@ export class UserController {
             return res.status(500).json({ message: "Erro interno do servidor" });
         }
     }
+
+    async deletePublication(req: Request, res: Response) {
+        try {
+            const params = idParamSchema.parse(req.params);
+            await this.publicationService.deletePublication(params.id);
+            return res.status(204).send();
+        } catch (error) {
+            if (error instanceof AppError) {
+                return res.status(error.statusCode).json({ message: error.message });
+            }
+
+            console.error(error);
+
+            return res.status(500).json({ message: "Erro interno do servidor" });
+        }
+    }
+
 }
