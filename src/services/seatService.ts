@@ -1,4 +1,3 @@
-import type { IPublicationRepository } from "../interfaces/publicationRepositoryInterface.ts";
 import type { ISeatCreate } from "../interfaces/seatInterface.ts";
 import type { ISeatRepository } from "../interfaces/seatRepositoryInterface.ts";
 import { indexToRowLabel, resolveSeatsPerRow } from "../utils/seatUtils.ts";

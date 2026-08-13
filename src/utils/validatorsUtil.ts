@@ -118,3 +118,7 @@ export const idParamSchema = z
 export const addCartItemSchema = z.object({
     seatId: z.number().int().positive(),
 });
+
+export const paymentInitiateSchema = z.object({
+    method: z.enum(["PIX", "CREDIT_CARD", "DEBIT_CARD"]),
+});
