@@ -7,6 +7,7 @@ import rateLimit from "express-rate-limit";
 import authRoutes from "./routes/authRoutes.ts";
 import userRoutes from "./routes/userRoutes.ts";
 import publicationRoutes from "./routes/publicationRoutes.ts";
+import shoppingCartRoutes from "./routes/shoppingCartRoutes.ts";
 
 const app = express();
 
@@ -41,6 +42,7 @@ const authLimiter = rateLimit({
 app.use("/auth", authLimiter, authRoutes);
 app.use("/user", authLimiter, userRoutes);
 app.use("/publication", authLimiter, publicationRoutes);
+app.use("/shopCart", authLimiter, shoppingCartRoutes);
 
 app.get("/", (req, res) => {
   res.json({

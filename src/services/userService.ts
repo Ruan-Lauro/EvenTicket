@@ -68,7 +68,7 @@ export class UserService {
 
     async deleteUser(id: number) {
         const user = await this.userRepo.findById(id);
-        if(!user) throw new AppError("Usuário não encontrado", 404);
-        await this.userRepo.delete(id);
+        if(!user) throw new Error("Usuário não encontrado");
+        return this.userRepo.delete(id);
     }
 }

@@ -103,3 +103,14 @@ export const idParamSchema = z
     message: "ID inválido",
   })
   .transform((obj) => ({ id: Number(obj.id) }));
+
+  export const shoppingCartCreateSchema = z.object({
+      userId: z.number(),
+      total: z.number().nonnegative(),
+      status: z.enum(["ACTIVE", "CHECKED_OUT", "ABANDONED"])
+  });
+
+  export const shoppingCartUpdateSchema = z.object({
+      total: z.number().nonnegative().optional(),
+      status: z.enum(["ACTIVE", "CHECKED_OUT", "ABANDONED"]).optional()
+  });

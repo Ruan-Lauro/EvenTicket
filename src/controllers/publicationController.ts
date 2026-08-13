@@ -11,7 +11,7 @@ export class PublicationController {
 
     private readonly publicationService: PublicationService;
     constructor(publicationService: PublicationService) {
-    this.publicationService = publicationService;
+        this.publicationService = publicationService;
     }
 
     async getPublications(req: Request, res: Response) {
