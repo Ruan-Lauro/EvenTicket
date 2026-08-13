@@ -9,15 +9,11 @@ import userRoutes from "./routes/userRoutes.ts";
 import publicationRoutes from "./routes/publicationRoutes.ts";
 import shoppingCartRoutes from "./routes/shoppingCartRoutes.ts";
 import shoppingCartItemRoutes from "./routes/shoppingCartItemRoutes.ts";
-import purchaseRoutes from "./routes/purchaseRoutes.ts"
+import purchaseRoutes from "./routes/purchaseRoutes.ts";
 
 const app = express();
 
-const port = Number(process.env.PORT) || 3000;
-
-app.use(
-  helmet(),
-);
+app.use(helmet());
 
 app.use(
   cors({
@@ -54,6 +50,4 @@ app.get("/", (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`API running on port ${port}`);
-});
+export default app;

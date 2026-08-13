@@ -1,9 +1,8 @@
-import type { NextFunction, Response } from "express";
-import type { AuthenticatedRequest } from "./authMiddleware.ts";
+import type { NextFunction, Response, Request } from "express";
 
 export function requireRole(...roles: string[]) {
   return (
-    req: AuthenticatedRequest,
+    req: Request,
     res: Response,
     next: NextFunction,
   ) => {
@@ -25,7 +24,7 @@ export function requireRole(...roles: string[]) {
 
 export function isUserOrRole(...roles: string[]) {
   return (
-    req: AuthenticatedRequest,
+    req: Request,
     res: Response,
     next: NextFunction
   ) => {
@@ -48,7 +47,7 @@ export function isUserOrRole(...roles: string[]) {
 
 export function isAdminOrRole(...roles: string[]) {
   return (
-    req: AuthenticatedRequest,
+    req: Request,
     res: Response,
     next: NextFunction
   ) => {
