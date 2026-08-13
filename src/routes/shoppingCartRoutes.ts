@@ -11,23 +11,23 @@ const shoppingCartRepository = new ShoppingCartRepository();
 const shoppingCartService = new ShoppingCartService(shoppingCartRepository);
 const shoppingCartController = new ShoppingCartController(shoppingCartService);
 
-router.get("/:id", authMiddleware, isUserOrRole("ADMIN"), (req, res) =>
+router.get("/:id", authMiddleware, (req, res) =>
   shoppingCartController.getShoppingCartById(req, res),
 );
 
-router.get("/user/:id", authMiddleware, isUserOrRole("ADMIN"), (req, res) =>
+router.get("/user/:id", authMiddleware, (req, res) =>
   shoppingCartController.getShoppingCartByUserId(req, res),
 );
 
-router.put("/:id", authMiddleware, isUserOrRole("ADMIN"), (req, res) =>
+router.put("/:id", authMiddleware, (req, res) =>
   shoppingCartController.updateShoppingCart(req, res),
 );
 
-router.post("/", authMiddleware, requireRole("USER"), (req, res) =>
+router.post("/", authMiddleware, (req, res) =>
   shoppingCartController.createShoppingCart(req, res),
 );
 
-router.delete("/:id", authMiddleware, isUserOrRole("ADMIN"), (req, res) =>
+router.delete("/:id", authMiddleware, (req, res) =>
   shoppingCartController.deleteShoppingCart(req, res),
 );
 

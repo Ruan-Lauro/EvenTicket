@@ -1,15 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
-export interface AuthenticatedRequest extends Request {
-  user?: {
-    id: number;
-    role: string;
-  };
-}
-
 export function authMiddleware(
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) {

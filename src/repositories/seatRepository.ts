@@ -39,4 +39,19 @@ export class SeatRepository implements ISeatRepository {
         });
     }
 
+    async findPublicationBySeatId(seatId: number) {
+        const seat = await prisma.seat.findUnique({
+            where: { id: seatId },
+            include: { publication: { select: { price: true } } },
+        });
+        return seat?.publication ?? null;
+    }
+
+    async updateManyStatus(seatIds: number[], status: "AVAILABLE" | "RESERVED" | "SOLD"): Promise<void> {
+        await prisma.seat.updateMany({
+            where: { id: { in: seatIds } },
+            data: { status },
+        });
+    }
+
 }

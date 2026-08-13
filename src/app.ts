@@ -8,6 +8,8 @@ import authRoutes from "./routes/authRoutes.ts";
 import userRoutes from "./routes/userRoutes.ts";
 import publicationRoutes from "./routes/publicationRoutes.ts";
 import shoppingCartRoutes from "./routes/shoppingCartRoutes.ts";
+import shoppingCartItemRoutes from "./routes/shoppingCartItemRoutes.ts";
+import purchaseRoutes from "./routes/purchaseRoutes.ts"
 
 const app = express();
 
@@ -43,6 +45,8 @@ app.use("/auth", authLimiter, authRoutes);
 app.use("/user", authLimiter, userRoutes);
 app.use("/publication", authLimiter, publicationRoutes);
 app.use("/shopCart", authLimiter, shoppingCartRoutes);
+app.use("/cartItem", authLimiter, shoppingCartItemRoutes);
+app.use("/purchase", authLimiter, purchaseRoutes);
 
 app.get("/", (req, res) => {
   res.json({

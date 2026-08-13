@@ -1,3 +1,4 @@
+import type { IPublicationRepository } from "../interfaces/publicationRepositoryInterface.ts";
 import type { ISeatCreate } from "../interfaces/seatInterface.ts";
 import type { ISeatRepository } from "../interfaces/seatRepositoryInterface.ts";
 import { indexToRowLabel, resolveSeatsPerRow } from "../utils/seatUtils.ts";
@@ -6,6 +7,7 @@ import { indexToRowLabel, resolveSeatsPerRow } from "../utils/seatUtils.ts";
 export class SeatService {
 
     private seatRepository: ISeatRepository;
+
     constructor(seatRepository: ISeatRepository) {
         this.seatRepository = seatRepository;
     }
@@ -68,6 +70,5 @@ export class SeatService {
 
         await Promise.all(seats.map((seat) => this.seatRepository.createSeat(seat)));
     }
-   
 
 }

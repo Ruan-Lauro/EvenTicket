@@ -114,3 +114,7 @@ export const idParamSchema = z
       total: z.number().nonnegative().optional(),
       status: z.enum(["ACTIVE", "CHECKED_OUT", "ABANDONED"]).optional()
   });
+
+export const addCartItemSchema = z.object({
+    seatId: z.number().int().positive(),
+});

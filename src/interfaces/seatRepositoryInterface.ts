@@ -1,3 +1,4 @@
+import type { Decimal } from "@prisma/client/runtime/client";
 import type { ISeat, ISeatCreate } from "./seatInterface.ts";
 
 export interface ISeatRepository {
@@ -7,4 +8,6 @@ export interface ISeatRepository {
     createSeat(data: ISeatCreate): Promise<ISeat>;
     updateSeat(id: number, data: Partial<ISeat>): Promise<ISeat>;
     deleteSeat(id: number): Promise<void>;
+    findPublicationBySeatId(seatId: number): Promise<{ price: Decimal } | null>;
+    updateManyStatus(seatIds: number[], status: "AVAILABLE" | "RESERVED" | "SOLD"): Promise<void>;
 }
