@@ -1,11 +1,9 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { AuthService } from "../services/authService.ts";
 import {
   loginSchema,
   registerSchema,
 } from "../utils/validatorsUtil.ts";
-import { AppError } from "../errors/appError.ts";
-
 
 export class AuthController {
 
@@ -14,24 +12,28 @@ export class AuthController {
     this.authService = authService;
   }
 
-  async register(req: Request, res: Response) {
-    const data = registerSchema.parse(req.body);
+  async register(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = registerSchema.parse(req.body);
 
-    const user = await this.authService.register(
-      data.name,
-      data.email,
-      data.password,
-    );
+      const user = await this.authService.register(
+        data.name,
+        data.email,
+        data.password,
+      );
 
-    return res.status(201).json({
-      message: "Usuário criado com sucesso",
-      user,
-    });
+      return res.status(201).json({
+        message: "Usuário criado com sucesso",
+        user,
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
 
-  async login(req: Request, res: Response) {
-    const data = loginSchema.parse(req.body);
+  async login(req: Request, res: Response, next: NextFunction) {
     try {
+      const data = loginSchema.parse(req.body);
       const result = await this.authService.login(
         data.email,
         data.password,
@@ -49,19 +51,8 @@ export class AuthController {
         user: result.user,
       });
     } catch (error) {
-        if (error instanceof AppError) {
-          return res.status(error.statusCode).json({
-          message: error.message,
-        });
-      }
-
-      console.error(error);
-
-      return res.status(500).json({
-        message: "Erro interno do servidor",
-      });
+      return next(error);
     }
-    
   }
 
   async logout(req: Request, res: Response) {
@@ -71,4 +62,17 @@ export class AuthController {
       message: "Logout realizado com sucesso",
     });
   }
+
+  async me(req: Request, res: Response) {
+    if (!req.user) {
+      return res.status(401).json({
+        message: "Não autenticado",
+      });
+    }
+
+    const user = await this.authService.me(req.user.id);
+
+    return res.status(200).json(user);
+  }
+
 }

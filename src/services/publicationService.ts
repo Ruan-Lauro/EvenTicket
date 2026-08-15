@@ -1,4 +1,7 @@
-import type { IPublicationRepository } from "../interfaces/publicationRepositoryInterface.ts";
+import type {
+    IPublicationRepository,
+    ISearchPublicationsFilters,
+} from "../interfaces/publicationRepositoryInterface.ts";
 import type { IPublicationCreateForOrganizer} from "../interfaces/publicationInterface.ts";
 import { AppError } from "../errors/appError.ts";
 import { Decimal } from "@prisma/client/runtime/client";
@@ -22,6 +25,18 @@ export class PublicationService {
         const publication = await this.publicationRepository.getPublicationById(id);
         if (!publication) throw new AppError("Publicação não encontrada", 404);
         return publication;
+    }
+
+    async searchPublications(filters: ISearchPublicationsFilters = {}) {
+        return this.publicationRepository.searchPublications(filters);
+    }
+
+    async getPublicationCategories() {
+        return this.publicationRepository.getPublicationCategories();
+    }
+
+    async getPublicationsByUserId(userId: number) {
+        return this.publicationRepository.getPublicationsByUserId(userId);
     }
 
     async createPublication(data: IPublicationCreateForOrganizer) {

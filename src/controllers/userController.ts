@@ -1,7 +1,6 @@
 
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { UserService } from "../services/userService.ts";
-import { AppError } from "../errors/appError.ts";
 import {
     userSchemaUpdate,
     createUserWithRoleSchema,
@@ -15,38 +14,26 @@ export class UserController {
         this.userService = userService;
     }
 
-    async getUsers(req: Request, res: Response) {
+    async getUsers(req: Request, res: Response, next: NextFunction) {
         try {
             const users = await this.userService.getUsers();
             return res.status(200).json(users);
         } catch (error) {
-            if (error instanceof AppError) {
-                return res.status(error.statusCode).json({ message: error.message });
-            }
-
-            console.error(error);
-
-            return res.status(500).json({ message: "Erro interno do servidor" });
+            return next(error);
         }
     }
 
-    async getUserById(req: Request, res: Response) {
+    async getUserById(req: Request, res: Response, next: NextFunction) {
         try {
             const params = idParamSchema.parse(req.params);
             const user = await this.userService.getUserById(params.id);
             return res.status(200).json(user);
         } catch (error) {
-            if (error instanceof AppError) {
-                return res.status(error.statusCode).json({ message: error.message });
-            }
-
-            console.error(error);
-
-            return res.status(500).json({ message: "Erro interno do servidor" });
+            return next(error);
         }
     }
 
-    async updateUser(req: Request, res: Response) {
+    async updateUser(req: Request, res: Response, next: NextFunction) {
         try {
             const params = idParamSchema.parse(req.params);
             const data = userSchemaUpdate.parse(req.body);
@@ -56,17 +43,11 @@ export class UserController {
                 data: updatedUser,
             });
         } catch (error) {
-            if (error instanceof AppError) {
-                return res.status(error.statusCode).json({ message: error.message });
-            }
-
-            console.error(error);
-
-            return res.status(500).json({ message: "Erro interno do servidor" });
+            return next(error);
         }
     }
 
-    async createUserWithRole(req: Request, res: Response) {
+    async createUserWithRole(req: Request, res: Response, next: NextFunction) {
         try {
             const data = createUserWithRoleSchema.parse(req.body);
             const newUser = await this.userService.createUserWithRole(data);
@@ -75,17 +56,11 @@ export class UserController {
                 data: newUser,
             });
         } catch (error) {
-            if (error instanceof AppError) {
-                return res.status(error.statusCode).json({ message: error.message });
-            }
-
-            console.error(error);
-
-            return res.status(500).json({ message: "Erro interno do servidor" });
+            return next(error);
         }
     }
 
-    async deleteUser(req: Request, res: Response) {
+    async deleteUser(req: Request, res: Response, next: NextFunction) {
         try {
             const params = idParamSchema.parse(req.params);
             await this.userService.deleteUser(params.id);
@@ -93,13 +68,7 @@ export class UserController {
                 mensagem: "Usuário deletado com sucesso",
             });
         } catch (error) {
-            if (error instanceof AppError) {
-                return res.status(error.statusCode).json({ message: error.message });
-            }
-
-            console.error(error);
-
-            return res.status(500).json({ message: "Erro interno do servidor" });
+            return next(error);
         }
     }
 }

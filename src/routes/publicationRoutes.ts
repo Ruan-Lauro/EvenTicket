@@ -15,24 +15,36 @@ const publicationRepository = new PublicationRepository();
 const publicationService = new PublicationService(publicationRepository, seatService);
 const publicationController = new PublicationController(publicationService);
 
-router.get("/", authMiddleware, (req, res) =>
-  publicationController.getPublications(req, res),
+router.get("/", authMiddleware, (req, res, next) =>
+  publicationController.getPublications(req, res, next),
 );
 
-router.get("/:id", authMiddleware, (req, res) =>
-  publicationController.getPublicationById(req, res),
+router.get("/search", authMiddleware, (req, res, next) =>
+  publicationController.searchPublications(req, res, next),
 );
 
-router.put("/:id", authMiddleware, requireRole("ORGANIZER"), (req, res) =>
-  publicationController.updatePublication(req, res),
+router.get("/categories", authMiddleware, (req, res, next) =>
+  publicationController.getPublicationCategories(req, res, next),
 );
 
-router.post("/", authMiddleware, requireRole("ORGANIZER"), (req, res) =>
-  publicationController.createPublication(req, res),
+router.get("/user/:id", authMiddleware, (req, res, next) =>
+  publicationController.getPublicationsByUserId(req, res, next),
 );
 
-router.delete("/:id", authMiddleware, requireRole("ORGANIZER"), (req, res) =>
-  publicationController.deletePublication(req, res),
+router.get("/:id", authMiddleware, (req, res, next) =>
+  publicationController.getPublicationById(req, res, next),
+);
+
+router.put("/:id", authMiddleware, requireRole("ORGANIZER"), (req, res, next) =>
+  publicationController.updatePublication(req, res, next),
+);
+
+router.post("/", authMiddleware, requireRole("ORGANIZER"), (req, res, next) =>
+  publicationController.createPublication(req, res, next),
+);
+
+router.delete("/:id", authMiddleware, requireRole("ORGANIZER"), (req, res, next) =>
+  publicationController.deletePublication(req, res, next),
 );
 
 export default router;

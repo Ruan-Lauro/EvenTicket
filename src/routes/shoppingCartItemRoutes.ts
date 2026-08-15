@@ -14,15 +14,15 @@ const seatRepo = new SeatRepository();
 const cartItemService = new ShoppingCartItemService(cartItemRepo, cartRepo, seatRepo);
 const cartItemController = new ShoppingCartItemController(cartItemService);
 
-router.get("/", authMiddleware, (req, res) => 
-    cartItemController.listItems(req, res));
+router.get("/", authMiddleware, (req, res, next) => 
+    cartItemController.listItems(req, res, next));
 
-router.post("/", authMiddleware, (req, res) => 
-    cartItemController.addItem(req, res),
+router.post("/", authMiddleware, (req, res, next) => 
+    cartItemController.addItem(req, res, next),
 );
 
-router.delete("/:id", authMiddleware, (req, res) =>
-     cartItemController.removeItem(req, res),
+router.delete("/:id", authMiddleware, (req, res, next) =>
+     cartItemController.removeItem(req, res, next),
 );
 
 export default router;

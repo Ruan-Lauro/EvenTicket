@@ -1,5 +1,4 @@
-import type { Request, Response } from "express";
-import { AppError } from "../errors/appError.ts";
+import type { Request, Response, NextFunction } from "express";
 import type { PaymentService } from "../services/paymentService.ts";
 import { paymentInitiateSchema } from "../utils/validatorsUtil.ts";
 
@@ -11,7 +10,7 @@ export class PaymentController {
         this.paymentService = paymentService;
     }
 
-    async initiate(req: Request, res: Response) {
+    async initiate(req: Request, res: Response, next: NextFunction) {
         try {
             const userId = req.user!.id;
             const purchaseId = Number(req.params.purchaseId);
@@ -19,41 +18,29 @@ export class PaymentController {
             const payment = await this.paymentService.initiate(purchaseId, data.method, userId);
             return res.status(201).json(payment);
         } catch (error) {
-            if (error instanceof AppError) {
-                return res.status(error.statusCode).json({ message: error.message });
-            }
-            console.error(error);
-            return res.status(500).json({ message: "Erro interno do servidor" });
+            return next(error);
         }
     }
 
-    async cancel(req: Request, res: Response) {
+    async cancel(req: Request, res: Response, next: NextFunction) {
         try {
             const userId = req.user!.id;
             const purchaseId = Number(req.params.purchaseId);
             const result = await this.paymentService.cancel(purchaseId, userId);
             return res.status(200).json(result);
         } catch (error) {
-            if (error instanceof AppError) {
-                return res.status(error.statusCode).json({ message: error.message });
-            }
-            console.error(error);
-            return res.status(500).json({ message: "Erro interno do servidor" });
+            return next(error);
         }
     }
 
-    async getByPurchaseId(req: Request, res: Response) {
+    async getByPurchaseId(req: Request, res: Response, next: NextFunction) {
         try {
             const userId = req.user!.id;
             const purchaseId = Number(req.params.purchaseId);
             const payment = await this.paymentService.findByPurchaseId(purchaseId, userId);
             return res.status(200).json(payment);
         } catch (error) {
-            if (error instanceof AppError) {
-                return res.status(error.statusCode).json({ message: error.message });
-            }
-            console.error(error);
-            return res.status(500).json({ message: "Erro interno do servidor" });
+            return next(error);
         }
     }
 }

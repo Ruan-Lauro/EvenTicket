@@ -77,4 +77,19 @@ export class AuthService {
     };
   }
 
+  async me(userId: number) {
+    const user = await this.userRepo.findById(userId);
+
+    if (!user) {
+      throw new AppError("Usuário não encontrado", 404);
+    }
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
+  }
+
 }

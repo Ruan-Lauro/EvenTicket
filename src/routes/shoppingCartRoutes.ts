@@ -11,24 +11,24 @@ const shoppingCartRepository = new ShoppingCartRepository();
 const shoppingCartService = new ShoppingCartService(shoppingCartRepository);
 const shoppingCartController = new ShoppingCartController(shoppingCartService);
 
-router.get("/:id", authMiddleware, (req, res) =>
-  shoppingCartController.getShoppingCartById(req, res),
+router.get("/:id", authMiddleware, (req, res, next) =>
+  shoppingCartController.getShoppingCartById(req, res, next),
 );
 
-router.get("/user/:id", authMiddleware, (req, res) =>
-  shoppingCartController.getShoppingCartByUserId(req, res),
+router.get("/user/:id", authMiddleware, (req, res, next) =>
+  shoppingCartController.getShoppingCartByUserId(req, res, next),
 );
 
-router.put("/:id", authMiddleware, (req, res) =>
-  shoppingCartController.updateShoppingCart(req, res),
+router.put("/:id", authMiddleware, (req, res, next) =>
+  shoppingCartController.updateShoppingCart(req, res, next),
 );
 
-router.post("/", authMiddleware, (req, res) =>
-  shoppingCartController.createShoppingCart(req, res),
+router.post("/", authMiddleware, (req, res, next) =>
+  shoppingCartController.createShoppingCart(req, res, next),
 );
 
-router.delete("/:id", authMiddleware, (req, res) =>
-  shoppingCartController.deleteShoppingCart(req, res),
+router.delete("/:id", authMiddleware, (req, res, next) =>
+  shoppingCartController.deleteShoppingCart(req, res, next),
 );
 
 

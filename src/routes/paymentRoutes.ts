@@ -23,16 +23,16 @@ const paymentService = new PaymentService(
 );
 const paymentController = new PaymentController(paymentService);
 
-router.post("/:purchaseId/payment", authMiddleware, (req, res) => 
-    paymentController.initiate(req, res),
+router.post("/:purchaseId/payment", authMiddleware, (req, res, next) => 
+    paymentController.initiate(req, res, next),
 );
 
-router.delete("/:purchaseId/payment", authMiddleware, (req, res) => 
-    paymentController.cancel(req, res),
+router.delete("/:purchaseId/payment", authMiddleware, (req, res, next) => 
+    paymentController.cancel(req, res, next),
 );
 
-router.get("/:purchaseId/payment", authMiddleware, (req, res) => 
-    paymentController.getByPurchaseId(req, res),
+router.get("/:purchaseId/payment", authMiddleware, (req, res, next) => 
+    paymentController.getByPurchaseId(req, res, next),
 );
 
 export default router;

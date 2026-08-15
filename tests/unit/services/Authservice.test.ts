@@ -141,4 +141,30 @@ describe("AuthService", () => {
       expect(jwt.sign).not.toHaveBeenCalled();
     });
   });
+
+  describe("me", () => {
+    it("deve retornar os dados do usuário autenticado quando ele existe", async () => {
+      const user = makeUser({ id: 7, name: "Maria Souza" });
+      vi.mocked(userRepo.findById).mockResolvedValue(user);
+
+      const result = await authService.me(7);
+
+      expect(userRepo.findById).toHaveBeenCalledWith(7);
+      expect(result).toEqual({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      });
+      expect(result).not.toHaveProperty("passwordHash");
+    });
+
+    it("deve lançar AppError 404 quando o usuário autenticado não existe", async () => {
+      vi.mocked(userRepo.findById).mockResolvedValue(null);
+
+      await expect(authService.me(999)).rejects.toThrow(
+        new AppError("Usuário não encontrado", 404),
+      );
+    });
+  });
 });

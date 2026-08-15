@@ -11,24 +11,24 @@ const userRepository = new UserRepository();
 const userService = new UserService(userRepository);
 const userController = new UserController(userService);
 
-router.get("/", authMiddleware, requireRole("ADMIN"), (req, res) =>
-  userController.getUsers(req, res),
+router.get("/", authMiddleware, requireRole("ADMIN"), (req, res, next) =>
+  userController.getUsers(req, res, next),
 );
 
-router.get("/:id", authMiddleware, isUserOrRole("ADMIN"), (req, res) =>
-  userController.getUserById(req, res),
+router.get("/:id", authMiddleware, isUserOrRole("ADMIN"), (req, res, next) =>
+  userController.getUserById(req, res, next),
 );
 
-router.put("/:id", authMiddleware, isUserOrRole("ADMIN"), (req, res) =>
-  userController.updateUser(req, res),
+router.put("/:id", authMiddleware, isUserOrRole("ADMIN"), (req, res, next) =>
+  userController.updateUser(req, res, next),
 );
 
-router.post("/createwithrole", authMiddleware, requireRole("ADMIN"), (req, res) =>
-  userController.createUserWithRole(req, res),
+router.post("/createwithrole", authMiddleware, requireRole("ADMIN"), (req, res, next) =>
+  userController.createUserWithRole(req, res, next),
 );
 
-router.delete("/:id", authMiddleware, requireRole("ADMIN"), (req, res) =>
-  userController.deleteUser(req, res),
+router.delete("/:id", authMiddleware, requireRole("ADMIN"), (req, res, next) =>
+  userController.deleteUser(req, res, next),
 );
 
 

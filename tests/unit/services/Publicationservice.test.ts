@@ -39,6 +39,9 @@ const makePublicationRepo = (): IPublicationRepository => ({
   createPublication: vi.fn(),
   updatePublication: vi.fn(),
   deletePublication: vi.fn(),
+  searchPublications: vi.fn(),
+  getPublicationCategories: vi.fn(),
+  getPublicationsByUserId: vi.fn(),
 });
 
 const makeSeatService = (): SeatService =>
@@ -86,6 +89,59 @@ describe("PublicationService", () => {
       await expect(publicationService.getPublicationById(99)).rejects.toThrow(
         new AppError("Publicação não encontrada", 404),
       );
+    });
+  });
+
+  describe("searchPublications", () => {
+    it("deve delegar a busca paginada com filtros", async () => {
+      const result = {
+        data: [makePublication()],
+        totalItems: 1,
+        totalPages: 1,
+        page: 1,
+        total: 10,
+      };
+      vi.mocked(publicationRepo.searchPublications).mockResolvedValue(result);
+
+      const response = await publicationService.searchPublications({
+        search: "rock",
+        gender: "Music",
+        recent: true,
+        page: 1,
+        total: 10,
+      });
+
+      expect(response).toEqual(result);
+      expect(publicationRepo.searchPublications).toHaveBeenCalledWith({
+        search: "rock",
+        gender: "Music",
+        recent: true,
+        page: 1,
+        total: 10,
+      });
+    });
+  });
+
+  describe("getPublicationCategories", () => {
+    it("deve retornar categorias únicas das publicações", async () => {
+      const categories = ["Music", "Sport"];
+      vi.mocked(publicationRepo.getPublicationCategories).mockResolvedValue(categories);
+
+      const result = await publicationService.getPublicationCategories();
+
+      expect(result).toEqual(categories);
+    });
+  });
+
+  describe("getPublicationsByUserId", () => {
+    it("deve retornar as publicações de um organizador", async () => {
+      const pubs = [makePublication({ userId: 42 }), makePublication({ id: 2, userId: 42 })];
+      vi.mocked(publicationRepo.getPublicationsByUserId).mockResolvedValue(pubs);
+
+      const result = await publicationService.getPublicationsByUserId(42);
+
+      expect(result).toEqual(pubs);
+      expect(publicationRepo.getPublicationsByUserId).toHaveBeenCalledWith(42);
     });
   });
 
