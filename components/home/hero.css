@@ -1,0 +1,151 @@
+@import "swiper/css";
+@import "swiper/css/effect-fade";
+@import "swiper/css";
+@import "swiper/css/effect-fade";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+@import "swiper/css";
+@import "swiper/css/effect-fade";
+
+.et-hero {
+          position: relative;
+          width: 100%;
+          height: 100svh;
+          min-height: 520px;
+          max-height: 860px;
+          background: #08090c;
+          overflow: hidden;
+          font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        .et-swiper {
+          width: 100%;
+          height: 100%;
+        }
+
+        .et-bg {
+          position: absolute;
+          inset: 0;
+          background-size: cover;
+          background-position: center;
+          transform: scale(1.06);
+          transition: transform 7s ease;
+          will-change: transform;
+        }
+        .swiper-slide-active .et-bg {
+          transform: scale(1);
+        }
+
+        .et-overlay {
+          position: absolute;
+          inset: 0;
+          background:
+            linear-gradient(to left, rgba(8,9,12,0.90) 36%, rgba(8,9,12,0.30) 90%, rgba(8,9,12,0.08) 100%),
+            linear-gradient(to top, rgba(8,9,12,0.80) 0%, transparent 55%);
+        }
+
+        .et-tag {
+          opacity: 0;
+          transform: translateY(10px);
+          transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
+        }
+        .swiper-slide-active .et-tag {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .et-title {
+          opacity: 0;
+          transform: translateY(16px);
+          transition: opacity 0.55s ease 0.32s, transform 0.55s ease 0.32s;
+        }
+        .swiper-slide-active .et-title {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .et-desc {
+          opacity: 0;
+          transform: translateY(14px);
+          transition: opacity 0.55s ease 0.42s, transform 0.55s ease 0.42s;
+        }
+        .swiper-slide-active .et-desc {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .et-meta {
+          opacity: 0;
+          transform: translateY(12px);
+          transition: opacity 0.5s ease 0.5s, transform 0.5s ease 0.5s;
+        }
+        .swiper-slide-active .et-meta {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .et-cta {
+          opacity: 0;
+          transform: translateY(10px);
+          transition: opacity 0.5s ease 0.58s, transform 0.5s ease 0.58s;
+        }
+        .swiper-slide-active .et-cta {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .et-buy-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 13px 26px;
+          background: #2563EB;
+          color: #fff;
+          border: none;
+          border-radius: 7px;
+          font-size: 15px;
+          font-weight: 600;
+          letter-spacing: 0.01em;
+          cursor: pointer;
+          transition: background 0.2s ease, transform 0.15s ease;
+          text-decoration: none;
+        }
+        .et-buy-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
+        .et-buy-btn:active { transform: translateY(0); }
+
+        .et-nav {
+          position: absolute;
+          left: clamp(32px, 6vw, 72px);
+          bottom: clamp(32px, 5vw, 56px);
+          z-index: 20;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .et-dot {
+          position: relative;
+          width: 28px;
+          height: 3px;
+          border-radius: 2px;
+          background: rgba(255,255,255,0.18);
+          border: none;
+          padding: 0;
+          cursor: pointer;
+          overflow: hidden;
+          transition: width 0.3s ease;
+        }
+        .et-dot.active { width: 48px; }
+        .et-dot-fill {
+          position: absolute;
+          left: 0; top: 0; bottom: 0;
+          background: #3B82F6;
+          border-radius: 2px;
+        }
+
+        @media (max-width: 640px) {
+          .et-hero { max-height: 680px; }
+          .et-overlay {
+            background:
+              linear-gradient(to top, rgba(8,9,12,0.92) 0%, rgba(8,9,12,0.55) 55%, rgba(8,9,12,0.18) 100%);
+          }
+        }

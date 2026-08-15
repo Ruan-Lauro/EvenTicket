@@ -4,7 +4,7 @@ export function proxy(request: NextRequest) {
   const token = request.cookies.get("access_token");
 
   const isProtectedRoute =
-    request.nextUrl.pathname.startsWith("/dashboard") ||
+    request.nextUrl.pathname.startsWith("/home") ||
     request.nextUrl.pathname.startsWith("/admin");
 
   if (isProtectedRoute && !token) {

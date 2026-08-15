@@ -5,7 +5,9 @@
   --foreground: #171717;
   --button: #1570EF;
   --buttonHover: #175CD3;
+  --button3: #2563EB;
   --textsm: #1a1a1a;
+  --maxScreen: 1980px;
 }
 
 @theme inline {
@@ -16,6 +18,8 @@
   --color-blue: var(--button);
   --color-blue-2: var(--buttonHover);
   --color-text: var(--textsm);
+  --container-maxScreen: var(--maxScreen);
+  --color-blue3: var(--button3);
 }
 
 @media (prefers-color-scheme: dark) {

@@ -30,7 +30,7 @@ export default function login() {
                 password,
             });
             if(result.status = 200){
-                route.push('/dashboard');
+                route.push('/home');
             }
        
         } catch(error) {

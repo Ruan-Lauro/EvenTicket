@@ -112,7 +112,7 @@ export default function Register() {
                 password: form.password,
             });
             if(loginResult.message !== "Login realizado com sucesso") return route.push('/login');
-            route.push('/dashboard');
+            route.push('/home');
         }
     }catch(error){
         const apiError = error as ApiError;
