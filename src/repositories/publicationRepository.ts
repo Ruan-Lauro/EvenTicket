@@ -1,4 +1,5 @@
 import { prisma } from "../config/database.ts";
+import { Prisma } from "../generated/prisma/client.ts";
 import type { IPublication, IPublicationCreate } from "../interfaces/publicationInterface.ts";
 import type {
     IPublicationRepository,
@@ -53,33 +54,70 @@ export class PublicationRepository implements IPublicationRepository {
         const safePage = Math.max(1, Number(page) || 1);
         const safeTotal = Math.max(1, Number(total) || 10);
 
-        const where = {
+        const where: Prisma.PublicationWhereInput = {
             ...(search
                 ? {
                     OR: [
-                        { name: { contains: search, mode: "insensitive" } },
-                        { local: { contains: search, mode: "insensitive" } },
-                        { type: { contains: search, mode: "insensitive" } },
-                        { description: { contains: search, mode: "insensitive" } },
+                        {
+                            name: {
+                                contains: search,
+                                mode: "insensitive",
+                            },
+                        },
+                        {
+                            local: {
+                                contains: search,
+                                mode: "insensitive",
+                            },
+                        },
+                        {
+                            type: {
+                                contains: search,
+                                mode: "insensitive",
+                            },
+                        },
+                        {
+                            description: {
+                                contains: search,
+                                mode: "insensitive",
+                            },
+                        },
                     ],
                 }
                 : {}),
+
             ...(gender
-                ? { type: { contains: gender, mode: "insensitive" } }
+                ? {
+                    type: {
+                        contains: gender,
+                        mode: "insensitive",
+                    },
+                }
                 : {}),
         };
 
         const [data, totalItems] = await Promise.all([
             prisma.publication.findMany({
                 where,
-                orderBy: recent ? [{ createdAt: "desc" }, { date: "asc" }] : [{ date: "asc" }],
+                orderBy: recent
+                    ? [
+                        { createdAt: "desc" },
+                        { date: "asc" },
+                    ]
+                    : [{ date: "asc" }],
                 skip: (safePage - 1) * safeTotal,
                 take: safeTotal,
             }),
-            prisma.publication.count({ where }),
+
+            prisma.publication.count({
+                where,
+            }),
         ]);
 
-        const totalPages = Math.max(1, Math.ceil(totalItems / safeTotal));
+        const totalPages = Math.max(
+            1,
+            Math.ceil(totalItems / safeTotal)
+        );
 
         return {
             data,
