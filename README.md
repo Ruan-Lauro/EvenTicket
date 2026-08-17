@@ -156,6 +156,8 @@ Os seguintes usuários já estão cadastrados no sistema e podem ser utilizados 
 - **Teste** → Organizador
 
 
+> **⚠️ Observação:** Em algumas situações, o cache do navegador pode manter informações antigas da aplicação. Caso alguma alteração não apareça corretamente, é necessário atualizar a página (ou realizar uma atualização forçada com `Ctrl + F5`). Essa questão não foi totalmente aprimorada devido ao tempo disponível para desenvolvimento.
+
 # 6. Configuração das variáveis de ambiente
 
 O arquivo `.env` contém informações de configuração e possíveis segredos.
