@@ -4,7 +4,7 @@ import logo from "@/assets/ticket.png";
 import logobranca from "@/assets/logobranca.png";
 import Image from "next/image";
 import Link from "next/link";
-import { ReactNode, useState, useEffect } from "react";
+import { ReactNode, useState, useEffect, useRef } from "react";
 import { RiCoupon2Line } from "react-icons/ri";
 import { RiAddCircleLine } from "react-icons/ri";
 import { RiCalendarCheckLine } from "react-icons/ri";
@@ -12,6 +12,8 @@ import { RiPassValidLine } from "react-icons/ri";
 import { RiMenuLine, RiCloseLine } from "react-icons/ri";
 import { IoPersonSharp } from "react-icons/io5";
 import { useAuth } from "@/hooks/useAuth";
+import { GrValidate } from "react-icons/gr";
+import { UserProfileModal } from "@/components/modal/userprofilemodal";
 
 interface MenuLinkProps {
     text: string;
@@ -25,7 +27,7 @@ interface MenuLinkProps {
 function MenuItem({ text, icon, linkPage, isActive, onClick, scrolled }: MenuLinkProps) {
     return (
         <Link href={linkPage} onClick={onClick}>
-            <li className={`flex items-center gap-1 cursor-pointer ${isActive ? "text-blue" : "hover:text-blue transition-colors"} ${scrolled?"text-text":"text-white"}`}>
+            <li className={`flex items-center gap-1 cursor-pointer ${isActive ? "text-blue" : "hover:text-blue transition-colors"} ${scrolled ? "text-text" : "text-white"}`}>
                 {icon}
                 <p className={`${isActive ? "relative after:absolute after:-bottom-1 after:left-1/2 after:h-0.5 after:w-1/2 after:-translate-x-1/2 after:bg-blue" : ""}`}>{text}</p>
             </li>
@@ -56,6 +58,8 @@ function MobileMenuItem({ text, icon, linkPage, isActive, onClick }: MenuLinkPro
 export default function Header({ value }: { value: number }) {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [profileOpen, setProfileOpen] = useState(false);
+    const profileAnchorRef = useRef<HTMLDivElement>(null);
     const user = useAuth();
 
     useEffect(() => {
@@ -79,25 +83,27 @@ export default function Header({ value }: { value: number }) {
     }, [mobileOpen]);
 
     const navItems = [
-        { text: "Criar evento",  icon: <RiAddCircleLine />,    linkPage: "/home/createEvents", id: 1, see: user.user?.role === "ORGANIZER" },
-        { text: "Meus eventos",  icon: <RiCalendarCheckLine />, linkPage: "", id: 2, see: user.user?.role === "ORGANIZER" },
-        { text: "Meus tickets",  icon: <RiCoupon2Line />,      linkPage: "/home/myTickets", id: 3, see: user.user?.role === "USER" },
-        { text: "funcionário",   icon: <RiPassValidLine />,    linkPage: "", id: 4, see: user.user?.role === "ADMIN" },
+        { text: "Criar evento",   icon: <RiAddCircleLine />,    linkPage: "/home/createEvents",    id: 1, see: user.user?.role === "ORGANIZER" },
+        { text: "Meus eventos",   icon: <RiCalendarCheckLine />, linkPage: "",                      id: 2, see: user.user?.role === "ORGANIZER" },
+        { text: "Meus tickets",   icon: <RiCoupon2Line />,       linkPage: "/home/myTickets",       id: 3, see: user.user?.role === "USER" },
+        { text: "funcionário",    icon: <RiPassValidLine />,     linkPage: "",                      id: 4, see: user.user?.role === "ADMIN" },
+        { text: "Validar Ticket", icon: <GrValidate />,          linkPage: "/home/validateTicket",  id: 6, see: user.user?.role === "CONCIERGE" },
     ];
 
-    const visibleNavItems = navItems;
+    const visibleNavItems = navItems.filter(v => v.see);
+
     return (
         <>
             <header
                 className={`
                     flex justify-between items-center py-3 px-5 w-full fixed top-0 z-70
                     transition-shadow duration-300 max-w-400
-                    ${scrolled? "shadow-md bg-white" : "shadow-none "}
-                    ${value === 0?"bg-black/1 backdrop-blur-md":""}
+                    ${scrolled ? "shadow-md bg-white" : "shadow-none"}
+                    ${value === 0 ? "bg-black/1 backdrop-blur-md" : ""}
                 `}
             >
-                <Link  href={"/home"} >
-                    {scrolled?(
+                <Link href={"/home"}>
+                    {scrolled ? (
                         <Image
                             src={logo}
                             width={350}
@@ -106,7 +112,7 @@ export default function Header({ value }: { value: number }) {
                             className="w-33 h-auto cursor-pointer transition-all hover:scale-105 duration-100"
                             loading="eager"
                         />
-                    ):(
+                    ) : (
                         <Image
                             src={logobranca}
                             width={350}
@@ -131,8 +137,31 @@ export default function Header({ value }: { value: number }) {
                             />
                         ))}
                     </ul>
-                    <div className={`flex items-center gap-1 border p-1.5 rounded-full cursor-pointer  transition-colors ${scrolled?"border-blue text-blue hover:text-black  hover:border-black/50":"border-white text-white hover:border-blue hover:text-blue"}`}>
-                        <IoPersonSharp className="text-2xl" />
+
+                    <div className="relative" ref={profileAnchorRef}>
+                        <button
+                            onClick={() => setProfileOpen((prev) => !prev)}
+                            aria-label="Abrir perfil"
+                            aria-expanded={profileOpen}
+                            className={`flex items-center gap-1 border p-1.5 rounded-full cursor-pointer transition-colors
+                                ${profileOpen
+                                    ? "border-blue text-blue bg-blue/5"
+                                    : scrolled
+                                        ? "border-blue text-blue hover:text-black hover:border-black/50"
+                                        : "border-white text-white hover:border-blue hover:text-blue"
+                                }`}
+                        >
+                            <IoPersonSharp className="text-2xl" />
+                        </button>
+
+                        {user.user && (
+                            <UserProfileModal
+                                user={user.user}
+                                isOpen={profileOpen}
+                                onClose={() => setProfileOpen(false)}
+                                isMobile={false}
+                            />
+                        )}
                     </div>
                 </nav>
 
@@ -196,11 +225,22 @@ export default function Header({ value }: { value: number }) {
                     </ul>
                 </nav>
 
-                <div className="px-5 py-5">
-                    <button className="w-full flex items-center gap-3 p-3 rounded-sm border border-blue text-blue hover:bg-blue/5 transition-colors">
-                        <IoPersonSharp className="text-xl" />
-                        <span className="font-medium text-sm">Minha conta</span>
-                    </button>
+                <div className="border-t border-gray-100">
+                    {user.user ? (
+                        <UserProfileModal
+                            user={user.user}
+                            isOpen={true}
+                            onClose={() => setMobileOpen(false)}
+                            isMobile={true}
+                        />
+                    ) : (
+                        <div className="px-5 py-5">
+                            <button className="w-full flex items-center gap-3 p-3 rounded-sm border border-blue text-blue hover:bg-blue/5 transition-colors">
+                                <IoPersonSharp className="text-xl" />
+                                <span className="font-medium text-sm">Minha conta</span>
+                            </button>
+                        </div>
+                    )}
                 </div>
             </aside>
         </>

@@ -17,6 +17,7 @@ import { useCountdown } from "@/hooks/useCountdown";
 import CountdownUnit from "@/components/home/CountdownUnit";
 import { SeatMap } from "@/components/home/seatMap";
 import { formatCurrency } from "@/utils/formatCurrency";
+import { useAuth } from "@/hooks/useAuth";
 
 
 function PublicationDetailPage() {
@@ -32,7 +33,7 @@ function PublicationDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [cartError, setCartError] = useState<string | null>(null);
   const countdown = useCountdown(publication?.date ?? new Date());
-
+  const {user} = useAuth();
   const { refresh } = useCart();
 
   useEffect(() => {
@@ -341,21 +342,26 @@ function PublicationDetailPage() {
                   </div>
                 )}
 
-                <button
-                  onClick={handleAddToCart}
-                  disabled={selectedSeats.length === 0 || publication.status !== "PUBLISHED"}
-                  className="w-full h-12 rounded-xl font-semibold text-sm text-white bg-[#1570EF] hover:bg-[#175CD3] active:scale-[0.98] transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
-                >
-                  {selectedSeats.length === 0
-                    ? "Selecione um assento"
-                    : `Adicionar ao carrinho · ${selectedSeats.length} assento${selectedSeats.length > 1 ? "s" : ""}`}
-                </button>
+                {user && user.role === "USER" && (
+                  <>
+                    <button
+                    onClick={handleAddToCart}
+                    disabled={selectedSeats.length === 0 || publication.status !== "PUBLISHED"}
+                    className="w-full h-12 rounded-xl font-semibold text-sm text-white bg-[#1570EF] hover:bg-[#175CD3] active:scale-[0.98] transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
+                  >
+                    {selectedSeats.length === 0
+                      ? "Selecione um assento"
+                      : `Adicionar ao carrinho · ${selectedSeats.length} assento${selectedSeats.length > 1 ? "s" : ""}`}
+                  </button>
 
-                {selectedSeats.length === 0 && (
-                  <p className="text-center text-xs text-gray-400 mt-2">
-                    Escolha um ou mais assentos no mapa acima
-                  </p>
+                  {selectedSeats.length === 0 && (
+                    <p className="text-center text-xs text-gray-400 mt-2">
+                      Escolha um ou mais assentos no mapa acima
+                    </p>
+                  )}
+                  </>
                 )}
+                
                 {cartError && (
                   <p className="text-center text-xs text-red-500 mt-2">{cartError}</p>
                 )}

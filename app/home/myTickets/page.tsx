@@ -19,6 +19,8 @@ import {
   TicketX,
   Loader2,
 } from "lucide-react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type EnrichedTicket = {
   ticket: Ticket;
@@ -166,6 +168,7 @@ export default function MeusTickets() {
   const [enriched, setEnriched] = useState<EnrichedTicket[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (!user?.id) return;
@@ -205,6 +208,13 @@ export default function MeusTickets() {
 
     load();
   }, [user?.id]);
+
+  useEffect(()=>{
+    if(user && user.role !== "USER") {
+      toast.error("Você não tem acesso a essa página");
+      return router.push("/home")
+    }
+  },[user])
 
   return (
     <MainPage page={3}>

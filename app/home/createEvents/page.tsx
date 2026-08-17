@@ -15,6 +15,8 @@ import hero from "@/assets/hero.webp";
 import EventSearch from "@/components/event/eventSearch";
 import GenreFilter from "@/components/genreFilter";
 import SelectedGenres from "@/components/selectedGenres";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
 
 export default function CreateEvents() {
 
@@ -31,7 +33,7 @@ export default function CreateEvents() {
   );
   const [showGenreMenu, setShowGenreMenu] = useState(false);
   const genreRef = useRef<HTMLDivElement>(null);
-
+  const {user} = useAuth();
   const [selectedEvent, setSelectedEvent] = useState<TicketMasterEvent | null>(null);
   const [listGender, setListGender] = useState<string[]|null>([]);
 
@@ -48,6 +50,13 @@ export default function CreateEvents() {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+
+  useEffect(()=>{
+    if(user && user.role !== "ORGANIZER") {
+      toast.error("Você não tem acesso a essa página");
+      return router.push("/home")
+    }
+  },[user])
 
   const fetchEvents = useCallback(async () => {
     setLoading(true);

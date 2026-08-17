@@ -16,12 +16,17 @@ import ModeButton from "@/components/validateTicket/modeButton";
 import QRScanner from "@/components/validateTicket/qRScanner";
 import { classifyError } from "@/utils/validateTicketFunctions";
 import { getPublicationBySeatIdApi, getSeatPublicationByIdApi } from "@/services/publicationService";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 export default function ValidarTicketPage() {
   const [mode, setMode] = useState<ScanMode>("idle");
   const [state, setState] = useState<ValidationState>({ phase: "idle" });
   const [manualCode, setManualCode] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const {user} = useAuth();
+  const router = useRouter();
 
   const reset = useCallback(() => {
     setState({ phase: "idle" });
@@ -80,6 +85,13 @@ export default function ValidarTicketPage() {
       setState({ phase: "error", kind, message, code });
     }
   }, [state]);
+
+  useEffect(() => {
+    if(user && user.role !== "CONCIERGE") {
+      toast.error("Você não tem acesso a essa página");
+      router.push("/home");
+    }
+  },[user])
 
   const handleQrDetect = useCallback(
     (code: string) => {

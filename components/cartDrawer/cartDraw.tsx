@@ -6,7 +6,6 @@ import { removeShoppingCartItemApi } from "@/services/shoppingCartItemService";
 import { getPublicationByIdApi, getPublicationBySeatIdApi, getSeatPublicationByIdApi } from "@/services/publicationService";
 import { Publication, Seat } from "@/types/publication";
 import { ShoppingCartItem } from "@/types/shoppingCartItem";
-import { formatCurrency } from "@/utils/formatCurrency";
 import EmptyCart from "./emptyCart";
 import CartItemCard from "./cartItemCard";
 import Payment from "@/components/payment/payment";
@@ -120,12 +119,6 @@ export function CartDrawer() {
       >
         <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-gray-100">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#1570EF]/10 flex items-center justify-center">
-              <svg className="w-4 h-4 text-[#1570EF]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round"
-                  d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
-              </svg>
-            </div>
             <div>
               <h2 className="text-sm font-bold text-gray-900 leading-tight">Meu carrinho</h2>
               <p className="text-xs text-gray-400">
@@ -180,7 +173,7 @@ export function CartDrawer() {
             }}
           />
         ) : (
-          <Button className="w-10"  onClick={() => setShowPayment(true)}>Finalizar compra</Button>
+          <Button className="max-w-40 self-center mb-5"  onClick={() => setShowPayment(true)}>Finalizar compra</Button>
         )}
       </div>
     </>

@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 import { CartProvider } from "@/contexts/cartContext";
 import { CartDrawer } from "@/components/cartDrawer/cartDraw";
 import { CartFab } from "@/components/cartDrawer/cartFab";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function MainPage({
     page,
@@ -14,6 +15,8 @@ export default function MainPage({
     children: ReactNode;
 }){
 
+    const {user} = useAuth();
+
     return(
         <CartProvider>
             <main className="flex justify-center">
@@ -22,7 +25,7 @@ export default function MainPage({
                     {children}
                 </section>
             </main>
-            <CartFab />
+            {user && user?.role === "USER" && <CartFab />}
             <CartDrawer />
         </CartProvider>
     );
