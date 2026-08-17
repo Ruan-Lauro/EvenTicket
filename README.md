@@ -136,6 +136,26 @@ Etickets/
 
 ---
 
+
+## 👥 Usuários para teste
+
+Os seguintes usuários já estão cadastrados no sistema e podem ser utilizados para testar as diferentes funcionalidades e permissões da aplicação:
+
+| Usuário | Senha | Perfil |
+|---|---|---|
+| ruan@gmail.com | `Ruan12345678@` | Bilheteiro |
+| lais@gmail.com | `Lais12345678@` | Administrador |
+| rian@gmail.com | `Rian123435678@` | Cliente |
+| teste@gmail.com | `12345678` | Organizador |
+
+### Perfis disponíveis
+
+- **Ruan** → Bilheteiro
+- **Laís** → Administrador
+- **Rian** → Cliente
+- **Teste** → Organizador
+
+
 # 6. Configuração das variáveis de ambiente
 
 O arquivo `.env` contém informações de configuração e possíveis segredos.
