@@ -91,7 +91,7 @@ docker compose version
 Clone o repositório:
 
 ```bash
-git clone https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git
+git clone https://github.com/Ruan-Lauro/EvenTicket.git
 ```
 
 Entre na pasta:
@@ -898,7 +898,7 @@ POSTGRES_PASSWORD=
 O procedimento completo para uma máquina nova é:
 
 ```bash
-git clone https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git
+git clone https://github.com/Ruan-Lauro/EvenTicket.git
 ```
 
 ```bash
