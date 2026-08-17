@@ -6,6 +6,7 @@ export interface ITicketRepository {
     findById(id: number): Promise<ITicket | null>;
     findByCode(code: string): Promise<ITicket | null>;
     findByPurchaseId(purchaseId: number): Promise<ITicket[]>;
+    findByUserId(userId: number): Promise<ITicket[]>;
     markAsUsed(id: number): Promise<ITicket>;
     deleteByPurchaseId(purchaseId: number): Promise<void>; 
 }

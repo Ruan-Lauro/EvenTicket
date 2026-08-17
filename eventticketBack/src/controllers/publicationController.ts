@@ -63,11 +63,31 @@ export class PublicationController {
         }
     }
 
+    async getPublicationBySeatId(req: Request, res: Response, next: NextFunction) {
+        try {
+            const params = idParamSchema.parse(req.params);
+            const publication = await this.publicationService.getPublicationBySeatId(params.id);
+            return res.status(200).json(publication);
+        } catch (error) {
+            return next(error);
+        }
+    }
+
     async getPublicationById(req: Request, res: Response, next: NextFunction) {
         try {
             const params = idParamSchema.parse(req.params);
             const publication = await this.publicationService.getPublicationById(params.id);
             return res.status(200).json(publication);
+        } catch (error) {
+            return next(error);
+        }
+    }
+
+    async getSeatsByPublicationId(req: Request, res: Response, next: NextFunction) {
+        try {
+            const params = idParamSchema.parse(req.params);
+            const seats = await this.publicationService.getSeatsByPublicationId(params.id);
+            return res.status(200).json(seats);
         } catch (error) {
             return next(error);
         }

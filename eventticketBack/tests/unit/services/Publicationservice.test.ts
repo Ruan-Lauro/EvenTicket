@@ -133,6 +133,18 @@ describe("PublicationService", () => {
     });
   });
 
+  describe("getSeatsByPublicationId", () => {
+    it("deve retornar assentos da publicação usando o serviço de assentos", async () => {
+      const seats = [{ id: 1, publicationId: 1, row: "A", number: 1, status: "AVAILABLE" }];
+      vi.spyOn(seatService, "getSeatsByPublicationId").mockResolvedValue(seats as any);
+
+      const result = await publicationService.getSeatsByPublicationId(1);
+
+      expect(result).toEqual(seats);
+      expect(seatService.getSeatsByPublicationId).toHaveBeenCalledWith(1);
+    });
+  });
+
   describe("getPublicationsByUserId", () => {
     it("deve retornar as publicações de um organizador", async () => {
       const pubs = [makePublication({ userId: 42 }), makePublication({ id: 2, userId: 42 })];
@@ -142,6 +154,34 @@ describe("PublicationService", () => {
 
       expect(result).toEqual(pubs);
       expect(publicationRepo.getPublicationsByUserId).toHaveBeenCalledWith(42);
+    });
+  });
+
+  describe("getPublicationBySeatId", () => {
+    it("deve retornar a publicação vinculada ao assento informado", async () => {
+      const pub = makePublication({ id: 9 });
+      vi.spyOn(seatService, "getSeatById").mockResolvedValue({
+        id: 12,
+        publicationId: 9,
+        row: "A",
+        number: 1,
+        status: "AVAILABLE",
+      } as any);
+      vi.mocked(publicationRepo.getPublicationById).mockResolvedValue(pub);
+
+      const result = await publicationService.getPublicationBySeatId(12);
+
+      expect(result).toEqual(pub);
+      expect(seatService.getSeatById).toHaveBeenCalledWith(12);
+      expect(publicationRepo.getPublicationById).toHaveBeenCalledWith(9);
+    });
+
+    it("deve lançar AppError 404 quando o assento não existe", async () => {
+      vi.spyOn(seatService, "getSeatById").mockRejectedValue(new AppError("Assento não encontrado", 404));
+
+      await expect(publicationService.getPublicationBySeatId(999)).rejects.toThrow(
+        new AppError("Assento não encontrado", 404),
+      );
     });
   });
 

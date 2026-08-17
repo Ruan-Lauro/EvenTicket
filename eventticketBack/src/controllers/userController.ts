@@ -39,7 +39,7 @@ export class UserController {
             const data = userSchemaUpdate.parse(req.body);
             const updatedUser = await this.userService.updateUser(params.id, data);
             return res.status(200).json({
-                mensagem: "Usuário atualizado com sucesso",
+                message: "Usuário atualizado com sucesso",
                 data: updatedUser,
             });
         } catch (error) {
@@ -52,7 +52,7 @@ export class UserController {
             const data = createUserWithRoleSchema.parse(req.body);
             const newUser = await this.userService.createUserWithRole(data);
             return res.status(201).json({
-                mensagem: "Usuário criado com sucesso",
+                message: "Usuário criado com sucesso",
                 data: newUser,
             });
         } catch (error) {
@@ -65,7 +65,7 @@ export class UserController {
             const params = idParamSchema.parse(req.params);
             await this.userService.deleteUser(params.id);
             return res.status(200).json({
-                mensagem: "Usuário deletado com sucesso",
+                message: "Usuário deletado com sucesso",
             });
         } catch (error) {
             return next(error);

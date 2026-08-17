@@ -1,6 +1,6 @@
 import { Router, type Request, type Response } from "express";
 import { authMiddleware } from "../middlewares/authMiddleware.ts";
-import { requireRole } from "../middlewares/roleMiddleware.ts";
+import { isUserOrRole, requireRole } from "../middlewares/roleMiddleware.ts";
 import { TicketController } from "../controllers/ticketController.ts";
 import { TicketService } from "../services/ticketService.ts";
 import { TicketRepository } from "../repositories/ticketRepository.ts";
@@ -19,7 +19,15 @@ router.get("/purchases/:purchaseId/tickets", authMiddleware, (req, res) =>
     ticketController.getByPurchaseId(req, res),
 );
 
-router.get("/tickets/:code", authMiddleware, (req: Request<{ code: string }>, res: Response) => 
+router.get("/:id", authMiddleware, (req: Request<{ id: string }>, res: Response) =>
+    ticketController.getById(req, res),
+);
+
+router.get("/user/:id", authMiddleware, (req: Request<{ id: string }>, res: Response) =>
+    ticketController.getByUserId(req, res),
+);
+
+router.get("/tickets/:code", (req: Request<{ code: string }>, res: Response) => 
     ticketController.getByCode(req, res),
 );
 

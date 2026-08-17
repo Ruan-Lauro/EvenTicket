@@ -30,6 +30,24 @@ export class TicketService {
         return this.ticketRepo.findByPurchaseId(purchaseId);
     }
 
+    async findById(id: number, userId: number): Promise<ITicket> {
+        const ticket = await this.ticketRepo.findById(id);
+        if (!ticket) throw new AppError("Ticket não encontrado", 404);
+
+        const purchase = await this.purchaseRepo.findById(ticket.purchaseId);
+        if (!purchase) throw new AppError("Compra não encontrada", 404);
+
+        const cart = await this.cartRepo.findById(purchase.shoppingCartId);
+        if (!cart || cart.userId !== userId) throw new AppError("Acesso negado", 403);
+
+        return ticket;
+    }
+
+    async findByUserId(userId: number): Promise<ITicket[]> {
+        const tickets = await this.ticketRepo.findByUserId(userId);
+        return tickets;
+    }
+
     async validate(code: string): Promise<{ ticket: ITicket; message: string }> {
         const ticket = await this.ticketRepo.findByCode(code);
         if (!ticket) throw new AppError("Ticket inválido", 404);

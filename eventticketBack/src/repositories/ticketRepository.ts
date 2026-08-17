@@ -35,6 +35,21 @@ export class TicketRepository implements ITicketRepository {
         });
     }
 
+    async findByUserId(userId: number): Promise<ITicket[]> {
+        return prisma.ticket.findMany({
+            where: {
+                purchase: {
+                    shoppingCart: {
+                        userId,
+                    },
+                },
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+    }
+
     async markAsUsed(id: number): Promise<ITicket> {
         return prisma.ticket.update({
             where: { id },

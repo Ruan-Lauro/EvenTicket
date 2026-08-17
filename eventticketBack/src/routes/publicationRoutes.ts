@@ -31,7 +31,15 @@ router.get("/user/:id", authMiddleware, (req, res, next) =>
   publicationController.getPublicationsByUserId(req, res, next),
 );
 
-router.get("/:id", authMiddleware, (req, res, next) =>
+router.get("/seat/:id", (req, res, next) =>
+  publicationController.getPublicationBySeatId(req, res, next),
+);
+
+router.get("/:id/seats", (req, res, next) =>
+  publicationController.getSeatsByPublicationId(req, res, next),
+);
+
+router.get("/:id", (req, res, next) =>
   publicationController.getPublicationById(req, res, next),
 );
 

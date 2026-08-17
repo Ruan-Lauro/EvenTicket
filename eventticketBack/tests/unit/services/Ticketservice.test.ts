@@ -45,6 +45,7 @@ const makeTicketRepo = (): ITicketRepository => ({
   findById: vi.fn(),
   findByCode: vi.fn(),
   findByPurchaseId: vi.fn(),
+  findByUserId: vi.fn(),
   markAsUsed: vi.fn(),
   deleteByPurchaseId: vi.fn(),
 });
@@ -116,6 +117,43 @@ describe("TicketService", () => {
       await expect(ticketService.findByPurchaseId(10, 1)).rejects.toThrow(
         new AppError("Acesso negado", 403),
       );
+    });
+  });
+
+  describe("findById", () => {
+    it("deve retornar o ticket quando ele pertence ao usuário", async () => {
+      const ticket = makeTicket({ id: 7, purchaseId: 11 });
+      vi.mocked(ticketRepo.findById).mockResolvedValue(ticket);
+      vi.mocked(purchaseRepo.findById).mockResolvedValue(makePurchase({ id: 11, shoppingCartId: 200 }));
+      vi.mocked(cartRepo.findById).mockResolvedValue(makeCart({ id: 200, userId: 1 }));
+
+      const result = await ticketService.findById(7, 1);
+
+      expect(ticketRepo.findById).toHaveBeenCalledWith(7);
+      expect(result).toEqual(ticket);
+    });
+
+    it("deve lançar AppError 403 quando o ticket não pertence ao usuário", async () => {
+      const ticket = makeTicket({ id: 7, purchaseId: 11 });
+      vi.mocked(ticketRepo.findById).mockResolvedValue(ticket);
+      vi.mocked(purchaseRepo.findById).mockResolvedValue(makePurchase({ id: 11, shoppingCartId: 200 }));
+      vi.mocked(cartRepo.findById).mockResolvedValue(makeCart({ id: 200, userId: 99 }));
+
+      await expect(ticketService.findById(7, 1)).rejects.toThrow(
+        new AppError("Acesso negado", 403),
+      );
+    });
+  });
+
+  describe("findByUserId", () => {
+    it("deve retornar todos os tickets do usuário informado", async () => {
+      const tickets = [makeTicket(), makeTicket({ id: 2, code: "CODE-XYZ" })];
+      vi.mocked(ticketRepo.findByUserId).mockResolvedValue(tickets);
+
+      const result = await ticketService.findByUserId(1);
+
+      expect(ticketRepo.findByUserId).toHaveBeenCalledWith(1);
+      expect(result).toEqual(tickets);
     });
   });
 

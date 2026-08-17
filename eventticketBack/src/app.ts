@@ -10,6 +10,8 @@ import publicationRoutes from "./routes/publicationRoutes.ts";
 import shoppingCartRoutes from "./routes/shoppingCartRoutes.ts";
 import shoppingCartItemRoutes from "./routes/shoppingCartItemRoutes.ts";
 import purchaseRoutes from "./routes/purchaseRoutes.ts";
+import paymentRoutes from "./routes/paymentRoutes.ts";
+import ticketRoutes from "./routes/ticketRoutes.ts";
 import { errorMiddleware } from "./middlewares/erroMiddleware.ts";
 
 const app = express();
@@ -44,6 +46,8 @@ app.use("/publication", authLimiter, publicationRoutes);
 app.use("/shopCart", authLimiter, shoppingCartRoutes);
 app.use("/cartItem", authLimiter, shoppingCartItemRoutes);
 app.use("/purchase", authLimiter, purchaseRoutes);
+app.use("/payment", authLimiter, paymentRoutes);
+app.use("/ticket", authLimiter, ticketRoutes);
 app.use(errorMiddleware);
 
 app.get("/", (req, res) => {

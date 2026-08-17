@@ -39,6 +39,17 @@ export class PublicationService {
         return this.publicationRepository.getPublicationsByUserId(userId);
     }
 
+    async getPublicationBySeatId(seatId: number) {
+        const seat = await this.seatService.getSeatById(seatId);
+        const publication = await this.publicationRepository.getPublicationById(seat.publicationId);
+        if (!publication) throw new AppError("Publicação não encontrada", 404);
+        return publication;
+    }
+
+    async getSeatsByPublicationId(publicationId: number) {
+        return this.seatService.getSeatsByPublicationId(publicationId);
+    }
+
     async createPublication(data: IPublicationCreateForOrganizer) {
         const findEvent = await this.findByIdTicketMaster(data.externalEventId);
         if (!findEvent) throw new AppError("Evento não encontrado na TicketMaster", 404);
@@ -49,7 +60,7 @@ export class PublicationService {
             userId: data.userId,
             externalEventId: data.externalEventId,
             name: findEvent.name,
-            local: findEvent._embedded.venues[0].name,
+            local: data.local,
             capacity: data.capacity,
             description: findEvent.info || null,
             type: findEvent.classifications[0].segment.name,
