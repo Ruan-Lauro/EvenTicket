@@ -81,7 +81,7 @@ export default function Header({ value }: { value: number }) {
     const navItems = [
         { text: "Criar evento",  icon: <RiAddCircleLine />,    linkPage: "/home/createEvents", id: 1, see: user.user?.role === "ORGANIZER" },
         { text: "Meus eventos",  icon: <RiCalendarCheckLine />, linkPage: "", id: 2, see: user.user?.role === "ORGANIZER" },
-        { text: "Meus tickets",  icon: <RiCoupon2Line />,      linkPage: "", id: 3, see: user.user?.role === "USER" },
+        { text: "Meus tickets",  icon: <RiCoupon2Line />,      linkPage: "/home/myTickets", id: 3, see: user.user?.role === "USER" },
         { text: "funcionário",   icon: <RiPassValidLine />,    linkPage: "", id: 4, see: user.user?.role === "ADMIN" },
     ];
 
