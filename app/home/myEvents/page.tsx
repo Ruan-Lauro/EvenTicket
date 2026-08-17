@@ -74,7 +74,7 @@ export default function MyEvents() {
     setLoading(true);
 
     try {
-      const data = await getPublicationsByUserIdApi(user.id);
+      const data = await getPublicationsByUserIdApi(Number(user.id));
       setPublications(Array.isArray(data) ? data : [data]);
     } catch {
       setPublications([]);
@@ -176,7 +176,7 @@ export default function MyEvents() {
         price: priceValue,
         capacity: capacityValue,
         status: selectedPublication.status,
-        userId: user.id,
+        userId: Number(user.id),
       });
 
       toast.success("Evento atualizado com sucesso.");

@@ -1,17 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { getEventById } from "@/services/ticketMasterService";
 
-type Props = {
-  params: Promise<{
-    id: string;
-  }>;
-};
 
 export async function GET(
-  { params }: Props
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const { id } = await context.params;
 
     const event = await getEventById(id);
 

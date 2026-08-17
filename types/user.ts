@@ -1,6 +1,7 @@
 export type UserRole =
   | "ADMIN"
   | "CONCIERGE"
+  | "ORGANIZER"   
   | "USER";
 
 export interface User {

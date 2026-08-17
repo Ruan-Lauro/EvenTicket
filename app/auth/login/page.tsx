@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginApi } from "@/services/authService";
 
-export default function login() {
+export default function Login() {
 
     const [error, setError] = useState("");
     const route = useRouter();

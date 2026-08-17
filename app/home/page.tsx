@@ -12,15 +12,14 @@ import Skeleton from "@/components/skeleton";
 import { Publication } from "@/types/publication";
 import {
   getPublicationCategoriesApi,
-  getPublicationsApi,
   searchPublicationsApi,
 } from "@/services/publicationService";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { parseAddress } from "@/utils/parseAddress";
 
-export default function Home() {
+function Home() {
   const [publications, setPublications] = useState<Publication[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
@@ -312,4 +311,12 @@ export default function Home() {
       </main>
     </MainPage>
   );
+}
+
+export default function Page(){
+   return(
+    <Suspense fallback={<div>Carregando...</div>}>
+      <Home/>
+    </Suspense>
+   );
 }

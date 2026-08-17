@@ -177,7 +177,7 @@ export default function MeusTickets() {
       setLoading(true);
       setError(null);
       try {
-        const ticket = await getTicketByUserIdApi(String(user.id));
+        const ticket = await getTicketByUserIdApi(String(user!.id));
         const tickets = Array.isArray(ticket) ? ticket : [ticket];
 
         const enrichedList: EnrichedTicket[] = await Promise.all(

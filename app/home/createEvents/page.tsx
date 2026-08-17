@@ -3,7 +3,7 @@
 import MainPage from "@/components/main";
 import Breadcrumb from "@/components/breadcrumb";
 import EventDetailModal from "@/components/event/eventDetailModal";
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef, Suspense } from "react";
 import { TicketMasterEvent, TicketMasterResponse, Classification } from "@/types/ticketmaster";
 import ShowEvent from "@/components/event/showEvent";
 import Pagination from "@/components/pagination";
@@ -18,7 +18,7 @@ import SelectedGenres from "@/components/selectedGenres";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 
-export default function CreateEvents() {
+function CreateEvents() {
 
   const [events, setEvents] = useState<TicketMasterEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -225,4 +225,12 @@ export default function CreateEvents() {
       </main>
     </MainPage>
   );
+}
+
+export default function Page(){
+    return(
+      <Suspense fallback={<div>Carregando...</div>}>
+        <CreateEvents/>
+      </Suspense>
+    );
 }

@@ -57,9 +57,9 @@ function statusConfig(status: string) {
   }
 }
 
-function fmt(date: string | undefined, opts: Intl.DateTimeFormatOptions) {
+function fmt(date: string | Date | undefined, opts: Intl.DateTimeFormatOptions) {
   if (!date) return null;
-  return new Date(date).toLocaleString("pt-BR", opts);
+  return (date instanceof Date ? date : new Date(date)).toLocaleString("pt-BR", opts);
 }
 
 export default function TicketViewPage() {

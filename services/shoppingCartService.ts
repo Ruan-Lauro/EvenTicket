@@ -23,7 +23,7 @@ export async function getShoppingCartByIdApi(id: number) {
   return response.json() as Promise<ShoppingCart>;
 }
 
-export async function getShoppingCartByUserIdApi(userId: number) {
+export async function getShoppingCartByUserIdApi(userId: string) {
   const response = await apiFetch(`/shopCart/user/${userId}`);
 
   if (!response.ok) {

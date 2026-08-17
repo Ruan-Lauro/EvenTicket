@@ -8,13 +8,7 @@ import {
 
 import { getMe } from "@/services/authService";
 import { useRouter } from "next/navigation";
-
-type User = {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-};
+import { User } from "@/types/user";
 
 type AuthContextData = {
   user: User | null;
