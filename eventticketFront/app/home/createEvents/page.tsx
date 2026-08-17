@@ -158,7 +158,7 @@ function CreateEvents() {
         <EventDetailModal
           event={selectedEvent}
           onClose={() => setSelectedEvent(null)}
-          userId={user?.id} 
+          userId={Number(user?.id)} 
         />
       )}
 
