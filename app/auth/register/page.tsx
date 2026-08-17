@@ -10,43 +10,9 @@ import Link from "next/link";
 import { loginApi, RegisterApi } from "@/services/authService";
 import { useRouter } from "next/navigation";
 import { ApiError } from "next/dist/server/api-utils";
+import { validateEmail, validateName, validatePassword } from "@/utils/authFunction";
 
-const validateName = (name: string) => {
-  if (name.length < 2) {
-    return "Nome deve ter ao menos 2 caracteres.";
-  }
 
-  if (name.length > 100) {
-    return "Nome muito longo.";
-  }
-
-  return "";
-};
-
-const validateEmail = (email: string) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return "E-mail inválido.";
-  }
-
-  return "";
-};
-
-const validatePassword = (password: string) => {
-  if (password.length < 8) {
-    return "A senha deve ter pelo menos 8 caracteres.";
-  }
-
-  if (!/[A-Z]/.test(password)) {
-    return "Deve conter ao menos uma letra maiúscula.";
-  }
-
-  if (!/[0-9]/.test(password)) {
-    return "Deve conter ao menos um número.";
-  }
-
-  return "";
-};
 
 export default function Register() {
 
