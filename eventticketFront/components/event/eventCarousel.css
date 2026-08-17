@@ -1,0 +1,144 @@
+@import "swiper/css";
+@import "swiper/css/navigation";
+
+.ec-wrap {
+    width: 100%;
+    padding: 0;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+.ec-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.ec-title {
+    font-size: clamp(1rem, 2vw, 1.30rem);
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.ec-see-all {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2563EB;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+}
+.ec-see-all:hover { opacity: 0.7; }
+
+.ec-swiper {
+    overflow: visible !important;
+    position: relative;
+}
+
+.ec-card {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+}
+.ec-card:focus-visible .ec-thumb {
+    box-shadow: 0 0 0 3px #2563EB;
+}
+
+.ec-thumb {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #e2e8f0;
+    margin-bottom: 10px;
+    position: relative;
+}
+.ec-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+.ec-card:hover .ec-thumb img {
+    transform: scale(1.04);
+}
+
+.ec-tag {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: #2563EB;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.ec-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: -0.01em;
+}
+
+.ec-venue {
+    font-size: 12px;
+    color: #64748b;
+    margin: 0 0 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ec-date {
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.ec-nav {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.ec-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1.5px solid #e2e8f0;
+    background: #fff;
+    color: #0f172a;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+    flex-shrink: 0;
+    padding: 0;
+}
+.ec-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+.ec-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+.ec-btn svg { display: block; }
+
+.ec-outer {
+    overflow: hidden;
+    border-radius: 4px;
+}
