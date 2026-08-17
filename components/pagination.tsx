@@ -63,7 +63,7 @@ export default function Pagination({
   }
 
   return (
-    <div className="flex items-center justify-center gap-2 mt-8 text-blue">
+    <div className="flex items-center justify-center gap-2 mt-8 text-black">
 
       {currentPage > 1 && (
         <Link

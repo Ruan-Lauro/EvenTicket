@@ -27,7 +27,7 @@ function MenuItem({ text, icon, linkPage, isActive, onClick, scrolled }: MenuLin
         <Link href={linkPage} onClick={onClick}>
             <li className={`flex items-center gap-1 cursor-pointer ${isActive ? "text-blue" : "hover:text-blue transition-colors"} ${scrolled?"text-text":"text-white"}`}>
                 {icon}
-                <p className={`${isActive ? "relative font-extrabold after:absolute after:-bottom-1 after:left-1/2 after:h-0.5 after:w-1/2 after:-translate-x-1/2 after:bg-blue" : ""}`}>{text}</p>
+                <p className={`${isActive ? "relative after:absolute after:-bottom-1 after:left-1/2 after:h-0.5 after:w-1/2 after:-translate-x-1/2 after:bg-blue" : ""}`}>{text}</p>
             </li>
         </Link>
     );
@@ -162,7 +162,7 @@ export default function Header({ value }: { value: number }) {
 
             <aside
                 className={`
-                    fixed top-0 right-0 z-50 h-full w-72 bg-white shadow-2xl
+                    fixed top-0 right-0 z-90 h-full w-72 bg-white shadow-2xl
                     flex flex-col
                     transition-transform duration-300 ease-in-out md:hidden
                     ${mobileOpen ? "translate-x-0" : "translate-x-full"}

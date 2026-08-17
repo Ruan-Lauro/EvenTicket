@@ -25,14 +25,14 @@ export default function login() {
         
         try {
             setError("");
-            const result =await loginApi({
+            const result = await loginApi({
                 email,
                 password,
             });
-            if(result.status = 200){
+
+            if (result && result.message === "Login realizado com sucesso") {
                 route.push('/home');
             }
-       
         } catch(error) {
           
              if (error instanceof Error) {

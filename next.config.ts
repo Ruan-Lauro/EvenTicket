@@ -7,12 +7,18 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "s1.ticketm.net",
       },
-       {
+      {
         protocol: "https",
         hostname: "images.universe.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
       },
     ],
   },
 };
 
 export default nextConfig;
+
+// event.venue

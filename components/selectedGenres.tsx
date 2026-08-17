@@ -18,7 +18,7 @@ export default function SelectedGenres({
           key={genre}
           className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full text-white bg-blue-600"
         >
-          {genre}
+   
 
           <button
             type="button"

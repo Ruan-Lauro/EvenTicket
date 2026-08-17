@@ -122,7 +122,7 @@ export default function EventPublicationForm({
         form.country,
       ]
         .filter(Boolean)
-        .join(", ");
+        .join(" \\ ");
 
       await createPublicationApi({
         externalEventId: event.id,

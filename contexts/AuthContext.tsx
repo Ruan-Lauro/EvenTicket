@@ -2,12 +2,12 @@
 
 import {
   createContext,
-  useContext,
   useEffect,
   useState,
 } from "react";
 
 import { getMe } from "@/services/authService";
+import { useRouter } from "next/navigation";
 
 type User = {
   id: number;
@@ -30,6 +30,7 @@ export function AuthProvider({
 }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     async function checkAuth() {
@@ -38,7 +39,7 @@ export function AuthProvider({
 
         setUser(user);
       } catch {
-        setUser(null);
+        return router.push("/auth/login");
       } finally {
         setLoading(false);
       }

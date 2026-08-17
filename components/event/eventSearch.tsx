@@ -20,7 +20,7 @@ export default function EventSearch({
         placeholder="Buscar evento..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="pl-8 pr-4 py-2 text-sm rounded-sm border outline-none transition-colors sm:w-52 w-full"
+        className="pl-8 pr-4 py-2 text-sm rounded-sm border outline-none transition-colors sm:w-100 w-full"
       />
     </div>
   );

@@ -1,12 +1,16 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import "./hero.css";
 import { RiCoupon2Line } from "react-icons/ri";
 import Button from "../Button";
+import { Publication } from "@/types/publication";
+import { getPublicationsApi } from "@/services/publicationService";
+import { parseAddress } from "@/utils/parseAddress";
+import { useRouter } from "next/navigation";
 
 interface Slide {
   id: number;
@@ -19,55 +23,51 @@ interface Slide {
   href?: string;
 }
 
-const slides: Slide[] = [
-  {
-    id: 1,
-    tag: "Rock",
-    title: "Pearl Jam",
-    description:
-      "Uma das maiores bandas de todos os tempos volta ao Brasil para uma noite que não se esquece.",
-    date: "15 Set 2026",
-    location: "Allianz Parque — São Paulo",
-    image:
-      "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=1600&q=80",
-    href: "#",
-  },
-  {
-    id: 2,
-    tag: "Eletrônico",
-    title: "Ultra Brasil",
-    description:
-      "Os principais nomes da música eletrônica mundial em um festival de 3 dias.",
-    date: "08 Nov 2026",
-    location: "Sambódromo do Anhembi — São Paulo",
-    image:
-      "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1600&q=80",
-    href: "#",
-  },
-  {
-    id: 3,
-    tag: "Cinema",
-    title: "Festival de Brasília",
-    description:
-      "O mais tradicional festival de cinema brasileiro celebra 60 anos com programação inédita.",
-    date: "22 Out 2026",
-    location: "Cine Brasília — Brasília",
-    image:
-      "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1600&q=80",
-    href: "#",
-  },
-];
-
 const DELAY = 5500;
+
+const formatDateWithTime = (date: string | Date): string => {
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  return dateObj.toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+};
 
 export default function HeroCarousel() {
   const swiperRef = useRef<SwiperType | null>(null);
   const [active, setActive] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [eventHero, setEventHero] = useState<Publication[]>([]);
+
+  const router = useRouter();
 
   const goTo = (i: number) => {
     swiperRef.current?.slideTo(i);
   };
+
+  async function getEventHero() {
+    try {
+      const response = await getPublicationsApi();
+      const publications = Array.isArray(response)
+        ? response
+        : Array.isArray(response)
+          ? response
+          : [];
+
+      setEventHero(publications.slice(0, 3));
+    } catch (error) {
+      console.error("Erro ao buscar categorias:", error);
+      setEventHero([]);
+    }
+  }
+
+  useEffect(() => {
+    getEventHero();
+  }, []);
 
   return (
     <section className="et-hero">
@@ -87,7 +87,7 @@ export default function HeroCarousel() {
             setProgress((1 - ratio) * 100);
           }}
         >
-          {slides.map((slide) => (
+          {eventHero && eventHero.length > 0 && eventHero.map((slide) => (
             <SwiperSlide key={slide.id}>
               <div
                 className="et-bg"
@@ -120,14 +120,14 @@ export default function HeroCarousel() {
                       paddingBottom: 2,
                     }}
                   >
-                    {slide.tag}
+                    {slide.type}
                   </span>
                 </div>
 
                 <h1
                   className="et-title"
                   style={{
-                    fontSize: "clamp(2.2rem, 5.5vw, 4rem)",
+                    fontSize: "clamp(2rem, 3.7vw, 4rem)",
                     fontWeight: 800,
                     color: "#fff",
                     lineHeight: 1.08,
@@ -136,17 +136,18 @@ export default function HeroCarousel() {
                     maxWidth: 600,
                   }}
                 >
-                  {slide.title}
+                  {slide.name}
                 </h1>
 
                 <p
-                  className="et-desc"
+                  className="et-desc line-clamp-4"
                   style={{
                     fontSize: "clamp(0.875rem, 1.5vw, 1rem)",
                     color: "#fff",
                     lineHeight: 1.65,
                     margin: "0 0 20px",
                     maxWidth: 420,
+                    maxHeight: 200,
                   }}
                 >
                   {slide.description}
@@ -163,7 +164,7 @@ export default function HeroCarousel() {
                   }}
                 >
                   <span style={{ fontSize: 13, color: "#fff" }}>
-                    {slide.date}
+                    {typeof slide.date === 'string' ? formatDateWithTime(slide.date) : formatDateWithTime(new Date(slide.date).toLocaleDateString())}
                   </span>
                   <span
                     style={{
@@ -175,12 +176,17 @@ export default function HeroCarousel() {
                     }}
                   />
                   <span style={{ fontSize: 13, color: "#fff" }}>
-                    {slide.location}
+                    {`${parseAddress(slide.local).city}, ${parseAddress(slide.local).country}`}
                   </span>
                 </div>
 
                 <div className="et-cta">
-                  <Button className="et-buy-btn max-w-50" >
+                  <Button 
+                    className="et-buy-btn max-w-50" 
+                     onClick={() => {
+                      router.push(`/home/${slide.id}`)
+                    }}  
+                  >
                     <RiCoupon2Line/>
                     Comprar ingresso
                   </Button>
@@ -191,7 +197,7 @@ export default function HeroCarousel() {
         </Swiper>
 
         <nav className="et-nav" aria-label="Navegação do carrosel">
-          {slides.map((_, i) => (
+          {eventHero && eventHero.length > 0 && eventHero.map((_, i) => (
             <button
               key={i}
               className={`et-dot ${i === active ? "active" : ""}`}
