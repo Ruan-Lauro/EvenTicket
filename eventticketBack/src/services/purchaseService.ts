@@ -32,11 +32,13 @@ export class PurchaseService {
         const items = await this.cartItemRepo.findByCartId(cart.id);
         if (items.length === 0) throw new AppError("Carrinho está vazio", 400);
 
-        for (const item of items) {
-            const seat = await this.seatRepo.getSeatById(item.seatId);
-            if (!seat || seat.status !== "AVAILABLE") {
+        const seatIds = items.map((item) => item.id);
+        const seats = await this.seatRepo.getSeatsByIds(seatIds);
+
+        for (const item of seats) {
+            if (!item || item.status !== "AVAILABLE") {
                 throw new AppError(
-                    `Assento ${item.seatId} não está mais disponível`,
+                    `Assento ${item.id} não está mais disponível`,
                     409,
                 );
             }

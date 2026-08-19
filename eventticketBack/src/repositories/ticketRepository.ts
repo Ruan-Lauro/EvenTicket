@@ -52,7 +52,7 @@ export class TicketRepository implements ITicketRepository {
 
     async markAsUsed(id: number): Promise<ITicket> {
         return prisma.ticket.update({
-            where: { id },
+            where: { id, usedAt: null },
             data: { usedAt: new Date() },
         });
     }

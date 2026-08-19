@@ -14,6 +14,16 @@ export class SeatRepository implements ISeatRepository {
         });
     }
 
+    async getSeatsByIds(ids: number[]) {
+        return prisma.seat.findMany({
+            where: {
+                id: {
+                    in: ids,
+                },
+            },
+        });
+    }
+
     async getSeatsByPublicationId(publicationId: number) {
         return prisma.seat.findMany({
             where: { publicationId },
@@ -49,7 +59,7 @@ export class SeatRepository implements ISeatRepository {
 
     async updateManyStatus(seatIds: number[], status: "AVAILABLE" | "RESERVED" | "SOLD"): Promise<void> {
         await prisma.seat.updateMany({
-            where: { id: { in: seatIds } },
+            where: { id: { in: seatIds }, status: 'AVAILABLE' },
             data: { status },
         });
     }

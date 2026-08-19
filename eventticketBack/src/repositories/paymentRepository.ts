@@ -1,4 +1,3 @@
-// repositories/paymentRepository.ts
 import { prisma } from "../config/database.ts";
 import type { IPayment, IPaymentCreate } from "../interfaces/paymentInterface.ts";
 import type { IPaymentRepository } from "../interfaces/paymentRepositoryInterface.ts";

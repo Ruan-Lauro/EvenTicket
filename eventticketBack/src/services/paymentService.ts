@@ -1,4 +1,3 @@
-// services/paymentService.ts
 import crypto from "node:crypto";
 import { AppError } from "../errors/appError.ts";
 import { Decimal } from "@prisma/client/runtime/client";
@@ -83,16 +82,6 @@ export class PaymentService {
         const updatedPayment = await this.paymentRepo.updateStatus(paymentId, "PAID");
 
         const items = await this.cartItemRepo.findByCartId(cart.id);
-
-        const tickets = items.map((item) => ({
-            purchaseId: purchase.id,
-            publicationId: 0, 
-            seatId: item.seatId,
-            code: crypto.randomUUID(),
-            value: item.value,
-            type: "STANDARD",
-            shareLink: null,
-        }));
 
         const ticketData = await Promise.all(
             items.map(async (item) => {
